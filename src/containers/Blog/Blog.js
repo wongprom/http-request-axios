@@ -7,11 +7,16 @@ import './Blog.css';
 import axios from 'axios';
 
 class Blog extends Component {
+    state = {
+        posts: []
+    }
     //GET request 
     componentDidMount() {
         axios.get("https://jsonplaceholder.typicode.com/posts")
             .then(response => {
-                console.log(response)
+                // Add data to our state
+                this.setState({ posts: response.data })
+
             });
 
     }
