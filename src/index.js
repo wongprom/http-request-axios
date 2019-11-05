@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import axios from 'axios';
+//URL part that always the same.
+axios.defaults.baseURL = "https://jsonplaceholder.typicode.com"
 
 // HANDELING REQUEST GLOBALLY
 axios.interceptors.request.use(request => {
@@ -33,7 +35,7 @@ const myInterceptor = axios.interceptors.response.use(response => {
   console.log(error)
   return Promise.reject(error)
 });
-axios.interceptors.request.eject(myInterceptor);
+// axios.interceptors.request.eject(myInterceptor);
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
