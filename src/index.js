@@ -3,6 +3,30 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import axios from 'axios';
 
-ReactDOM.render( <App />, document.getElementById( 'root' ) );
+// HANDELING REQUEST GLOBALLY
+axios.interceptors.request.use(request => {
+  console.log(request)
+  //You can work/edit the data before you return it, 
+  // Need to return request, other wise we block the data
+  return request;
+}, error => {
+  //catches errors if the request not was made, ex your internet connection is down. Does not catch general errors, like wrong url.
+  console.log(error)
+  return Promise.reject(error)
+});
+
+axios.interceptors.response.use(response => {
+  console.log(response)
+  return response;
+}, error => {
+  //Does catch general errors
+  console.log(error)
+  return Promise.reject(error)
+});
+
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
