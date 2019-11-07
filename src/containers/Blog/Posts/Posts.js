@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Post from '../../../components/Post/Post'
 import './Posts.css'
 
+
 import axios from '../../../axios';
 
 export class Posts extends Component {
@@ -9,6 +10,8 @@ export class Posts extends Component {
     posts: [],
   }
   componentDidMount() {
+    // Extra props from react-router-dom that we can use. We get these props in default. 
+    console.log(this.props)
     axios.get("/posts")
       .then(response => {
         const posts = response.data.slice(0, 4);
@@ -48,4 +51,4 @@ export class Posts extends Component {
   }
 }
 
-export default Posts
+export default Posts;
