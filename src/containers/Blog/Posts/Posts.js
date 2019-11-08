@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Post from '../../../components/Post/Post'
-import { Link } from 'react-router-dom';
 import './Posts.css'
 
 
@@ -31,19 +30,23 @@ export class Posts extends Component {
       });
   }
   postSelectedHandler = (id) => {
-    this.setState({ selectedPostID: id })
+    // can use either way
+    this.props.history.push({ pathname: '/' + id })
+    // this.props.history.push( "/" + id )
+
   }
   render() {
     let posts = <p style={{ textAlign: "center" }}>Something went wrong!!!</p>
     if (!this.state.error) {
       posts = this.state.posts.map(post => {
         return (
-          <Link key={post.id} to={"/" + post.id}>
-            <Post
-              title={post.title}
-              author={post.author}
-              clicked={() => this.postSelectedHandler(post.id)} />
-          </Link>
+          // <Link  to={"/" + post.id}>
+          <Post
+            key={post.id}
+            title={post.title}
+            author={post.author}
+            clicked={() => this.postSelectedHandler(post.id)} />
+          // </Link>
         )
       })
     }
