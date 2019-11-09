@@ -10,7 +10,10 @@ class NewPost extends Component {
         author: 'Jimmy',
         submitted: false
     }
-
+    componentDidMount() {
+        //if unAuth => this.props.history.replace("/posts")
+        console.log(this.prps)
+    }
 
     postDataHandler = () => {
         let data = {
