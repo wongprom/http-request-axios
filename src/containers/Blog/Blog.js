@@ -1,73 +1,57 @@
 import React, { Component } from 'react';
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
+// import NewPost from './NewPost/NewPost';
+import asyncComponent from '../../hoc/asyncComponent';
+import Posts from "../Blog/Posts/Posts";
 import './Blog.css';
-import axios from '../../axios';
+const AsyncNewPost = asyncComponent(() => {
+    return import('./NewPost/NewPost');
+});
 
 class Blog extends Component {
     state = {
-        posts: [],
-        selectedPostID: null,
-        error: false,
-    }
-    //GET request 
-    componentDidMount() {
-        axios.get("/posts")
-            .then(response => {
-                const posts = response.data.slice(0, 4);
-                const updatedPosts = posts.map(post => {
-                    return {
-                        ...post,
-                        author: "Jimmy"
-                    }
-                })
-                // Add data to our state
-                this.setState({ posts: updatedPosts })
-
-            })
-            .catch(error => {
-                // console.log(error)
-                this.setState({ error: true })
-            });
-
-    }
-
-    postSelectedHandler = (id) => {
-        this.setState({ selectedPostID: id })
+        auth: true,
     }
     render() {
-        let posts = <p style={{ textAlign: "center" }}>Something went wrong!!!</p>
-        if (!this.state.error) {
-            posts = this.state.posts.map(post => {
-                return <Post
-                    key={post.id}
-                    title={post.title}
-                    author={post.author}
-                    clicked={() => this.postSelectedHandler(post.id)} />
-            })
-        }
-
         return (
             <div className="Blog">
                 <header>
                     <nav>
                         <ul>
-                            <li> <a href="/">Home</a></li>
-                            <li><a href="/new-post">New Post</a></li>
+                            <li><NavLink
+                                to="/posts/"
+                                exact
+                                activeClassName="active"
+                                activeStyle={{
+                                    color: "orange",
+                                    textDecoration: "underline"
+                                }}>Posts</NavLink></li>
+                            <li><NavLink
+                                to={{
+                                    pathname: "/new-post",
+                                    hash: "#submit",
+                                    search: "?quick-submit=true"
+                                }}>New Post</NavLink></li>
                         </ul>
                     </nav>
                 </header>
-                <section className="Posts">
-                    {posts}
-                </section>
-                <section>
-                    <FullPost id={this.state.selectedPostID} />
-                </section>
-                <section>
-                    <NewPost />
-                </section>
+                {/* <Route path="/" exact render={() => <h1>Home</h1>} /> */}
+                <Switch>
+                    {this.state.auth ? <Route path="/new-post" component={AsyncNewPost} /> : null}
+                    <Route path="/posts" component={Posts} />
+                    <Route render={() => {
+                        return (
+                            <div>
+                                <h1>Not Found</h1>
+                                <h3>Instead of render a callback (what I'm doing now), you can display your 404 component</h3>
+                                <p>NOTE: This Route should always be the last Route</p>
+                            </div>
+                        )
+                    }} />
+                    {/* <Redirect from="/" to="/posts" /> */}
+                    {/* <Route path="/" component={Posts} /> */}
+                </Switch>
             </div>
         );
     }
