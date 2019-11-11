@@ -37,7 +37,16 @@ class Blog extends Component {
                 <Switch>
                     {this.state.auth ? <Route path="/new-post" component={NewPost} /> : null}
                     <Route path="/posts" component={Posts} />
-                    <Redirect from="/" to="/posts" />
+                    <Route render={() => {
+                        return (
+                            <div>
+                                <h1>Not Found</h1>
+                                <h3>Instead of render a callback (what I'm doing now), you can display your 404 component</h3>
+                                <p>NOTE: This Route should always be the last Route</p>
+                            </div>
+                        )
+                    }} />
+                    {/* <Redirect from="/" to="/posts" /> */}
                     {/* <Route path="/" component={Posts} /> */}
                 </Switch>
             </div>
